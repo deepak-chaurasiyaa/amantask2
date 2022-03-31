@@ -48,6 +48,7 @@ module.exports = {
     );
   },
   updateProduct: (data, callBack) => {
+    console.log(data.rating,"iid")
       console.log(data.productName,data.price,data.image,data.rating,data.id,"a,b,c,d,e,f,g")
     pool.query(
       `update product set productName=?, price=?, image=?, rating=? where id = ?`,

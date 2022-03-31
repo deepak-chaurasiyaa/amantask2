@@ -11,7 +11,7 @@ const {getProduct} = require("../controllers/product.controller");
 const {userAuth} = require("../helpers/Auth/Auth.controller")
 const {validateBody,validateParam,schemas} = require("../helpers/bodyValidate/bodyValidation")
 // router.get("/",getUsers);
-router.get("/token",getUserByUserId)   /// Reading User Id From Bearer Token
+router.get("/by-token",getUserByUserId)   /// Reading User Id From Bearer Token
 router.get("/",getUsers)   /// Reading User Id From Bearer Token
 router.get("/product",getProduct)   /// Reading User Id From Bearer Token
 router.post("/", validateBody(schemas.post_validation), createUser);

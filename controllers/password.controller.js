@@ -38,13 +38,13 @@ const email = req.body.email;
                 data: "No User Found Please do Sign Up"
             });
             }
-            console.log('email',results)
-            if(results.length < 1){
-            return res.json({
-                success: 1,
-                message: "Reset Password Link has been sent successfully to your email"
-                });
-            }
+            // console.log('email',results.length)
+            // if(results.length < 1){
+            // return res.json({
+            //     success: 1,
+            //     message: "Reset Password Link has been sent successfully to your email"
+            //     });
+            // }
             if(results){
             const jsontoken = sign({ FullName: results[0].firstName + " " + results[0].lastName,
             id:results[0].id,
@@ -52,6 +52,7 @@ const email = req.body.email;
                 expiresIn: "1h"
             });
             results[0].token = jsontoken;
+            console.log("res[0]",results[0])
             updateUser(results[0], (err, results) => {
                 if (err) {
                     console.log(err);
@@ -82,14 +83,15 @@ const email = req.body.email;
 }
 
 let sendMail = function(email,token){
+    
     var mailTransporter = nodemailer.createTransport({
         host: "smtp.mailtrap.io",
         port: 2525,
         auth: {
-        user: "693f5045d1518d",
-        pass: "dbff013f91afa5"
+          user: "f28b729a3997d3",
+          pass: "b832c91eddf1cb"
         }
-    });
+      });
 
     let mailDetails = {
         from: 'dchaurasiya8589@gmail.com',

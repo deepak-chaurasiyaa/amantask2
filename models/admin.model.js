@@ -3,47 +3,32 @@ const pool = require("../configuration/database");
 module.exports = {
    
   create: (data, callBack) => {
-      var flag = true;
-    pool.query(
-        `select * from admin where email = ?`,
-        [data.email],
+    if(! data.token){
+      data.token = ""
+    }
+      pool.query(
+        `insert into admin(firstName, lastName, gender, email, password, number,token) 
+                  values(?,?,?,?,?,?,?)`,
+        [
+          data.firstName,
+          data.lastName,
+          data.gender,
+          data.email,
+          data.password,
+          data.number,
+          data.token
+        ],
         (error, results, fields) => {
           if (error) {
-            flag = false
+            callBack(error);
           }
-          if(results.length > 0){
-              return callBack(null,{ message:{data:"User Already Exists. Please Use another Email.",err:true}})
-          }
-          else{
-            if(!data.token){
-              data.token=""
-            }
-            pool.query(
-                `insert into admin(firstName, lastName, gender, email, password, number,token) 
-                          values(?,?,?,?,?,?,?)`,
-                [
-                  data.firstName,
-                  data.lastName,
-                  data.gender,
-                  data.email,
-                  data.password,
-                  data.number,
-                  data.token
-                ],
-                (error, results, fields) => {
-                  if (error) {
-                    callBack(error);
-                  }
-                  return callBack(null, results);
-                }
-              );
-          }
+          return callBack(null, results);
         }
       );
-    
-  },
+  }, 
 
   getUserByUserEmail: (email, callBack) => {
+    // console.log("xcxc")
     pool.query(
       `select * from admin where email = ?`,
       [email],

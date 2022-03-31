@@ -10,7 +10,7 @@ const {
   const { hashSync, genSaltSync, compareSync } = require("bcrypt");
   const { sign } = require("jsonwebtoken");
   const jwt = require("jsonwebtoken");
-const config = process.env
+  const config = process.env
   var getIdByToken = (req) =>{
     let getToken = (req) =>{
         if (

@@ -22,10 +22,12 @@ const {create,updateProduct} = require('../models/product.model')
     }
 
     let update = async(req, res) =>{
-        console.log("reaching here")
+        // console.log("reaching here",req.body)
         const body = req.body;
         body.image = req.file.path;
-        body.id=req.params.id;
+        if(req.params.id != undefined){
+          body.id = req.params.id; 
+        }
          updateProduct(body, (err, results) => {
            if (err) {
              console.log(err);

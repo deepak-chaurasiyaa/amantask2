@@ -38,25 +38,43 @@ module.exports = {
             }
         });
     },
-    // createSuperAdmin: (req, res) => {
-    //   const body = req.body;
-    //   const salt = genSaltSync(10);
-    //   body.password = hashSync(body.password, salt);
-    //   create(body, (err, results) => {
-    //     if (err) {
-    //       console.log(err);
-    //       return res.status(400).json({
-    //         success: 0,
-    //         message:err
-    //       });
-    //     }else{
-    //       return res.status(200).json({
-    //         success: 1,
-    //         data: results 
-    //       });
-    //     }
+    createSuperAdmin: (req, res) => {
+      const body = req.body;
+      const salt = genSaltSync(10);
+      body.password = hashSync(body.password, salt);
+      create(body, (err, results) => {
+        if (err) {
+          console.log(err);
+          return res.status(400).json({
+            success: 0,
+            message:err
+          });
+        }else{
+          return res.status(200).json({
+            success: 1,
+            data: results 
+          });
+        }
        
-    //   });
-    // },
-    
+      });
+    },
+    deleteSuperAdmin: (req, res) => {
+      const data = req.params.id;
+      deleteSuperAdmin(data, (err, results) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        if (!results) {
+          return res.json({
+            success: 0,
+            message: "Record Not Found"
+          });
+        }
+        return res.json({
+          success: 1,
+          message: "user deleted successfully"
+        });
+      });
+    }
 } 

@@ -24,18 +24,21 @@ const {
 } 
 
 module.exports = {
+  
   createUser: (req, res) => {
-    const body = req.body;
+    getUserByUserEmail(req.body.email,(err,result)=>{
+      if(result.length>0){
+        console.log(result,"line 31")
+        return res.status(400).json({
+          status:2,
+          message:"User already exists with this Email!"
+        })
+      }
+      else{
+        const body = req.body;
     const salt = genSaltSync(10);
     body.password = hashSync(body.password, salt);
     create(body, (err, results) => {
-      if(results.message.err){
-        return res.status(500).json({
-          success: 0,
-          message:results.message.data
-        });
-      }
-
       if (err) {
         console.log(err);
         return res.status(400).json({
@@ -50,9 +53,13 @@ module.exports = {
       }
       
     });
+    }
+    })
+    
   },
 
   login: (req, res) => {
+    console.log("xxxxxxxxxxxxxxxxx",req.body)
   try{
     
     const body = req.body;
@@ -114,6 +121,20 @@ module.exports = {
       req.user = decoded;
       let id = decoded.id;
       console.log("id",id)
+      // if(!id){
+      //   try{
+      //      id=req.params.id;
+      //     if(!id){
+      //       return res.status(404).json({
+      //         status:0,
+      //         message:"Id Not Found"
+      //       })
+      //     }
+      //   }
+      //   catch(err){
+      //     return(err.message)
+      //   }
+      // }
     getUserByUserId(id, (err, results) => {
       if (err) {
         console.log(err);
@@ -187,6 +208,12 @@ module.exports = {
       if (err) {
         console.log(err);
         return;
+      }
+      if(results.affectedRows === 0){
+        return res.json({
+          success: 0,
+          message: "Record Not Found for performing delete operation"
+        });
       }
       if (!results) {
         return res.json({
