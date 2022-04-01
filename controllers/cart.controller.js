@@ -1,4 +1,4 @@
-const {create,getCartItemByUserId} = require("../models/cart.model")
+const {create,getCartItemByUserId,getCartItemByUserIdProduct,updateCart} = require("../models/cart.model")
 const jwt = require("jsonwebtoken");
 const config = process.env
 var getIdByToken = (req) =>{
@@ -23,6 +23,31 @@ var getIdByToken = (req) =>{
 module.exports = {
     addToCart: (req, res) => {
       const body = req.body;
+      const id = getIdByToken(req)
+      body.userId = id;
+      const productId = body.productId;
+      // console.log(body.userId,"line26")
+      getCartItemByUserIdProduct({id:id,productId:productId},(err,results)=>{
+        if (err) {
+            console.log(err);
+            return res.status(400).json({
+              success: 0,
+              message:err
+            });
+          }else if(results.length > 0){
+            console.log("qantity,",results.qantity)
+            updateCart({req,productId},(err,results) =>{
+              if (err) {
+                console.log(err);
+                return res.status(400).json({
+                  success: 0,
+                  message:err
+                });
+              }
+              console.log("udate",results) 
+            })
+          }
+    })
       create(body, (err, results) => {
         if (err) {
           console.log(err);
@@ -38,7 +63,7 @@ module.exports = {
         }
        
       });
-    },
+    }, 
     getCartItemByUserId:(req,res)=>{
         const id = getIdByToken(req)
         // const id = req.params.id;
