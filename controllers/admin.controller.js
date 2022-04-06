@@ -28,7 +28,6 @@ module.exports = {
   createUser: (req, res) => {
     getUserByUserEmail(req.body.email,(err,result)=>{
       if(result.length>0){
-        console.log(result,"line 31")
         return res.status(400).json({
           status:2,
           message:"User already exists with this Email!"
@@ -59,7 +58,6 @@ module.exports = {
   },
 
   login: (req, res) => {
-    console.log("xxxxxxxxxxxxxxxxx",req.body)
   try{
     
     const body = req.body;
@@ -77,7 +75,6 @@ module.exports = {
         const result = compareSync(body.password, results[0].password);
         if (result) {
           results.password = undefined;
-          // console.log(results,"line 49")
           const jsontoken = sign({ FullName: results[0].firstName + " " + results[0].lastName,
           id:results[0].id, isAdmin:true,
         },process.env.secret_key, {
@@ -120,21 +117,7 @@ module.exports = {
       const decoded = jwt.verify(token, config.secret_key);
       req.user = decoded;
       let id = decoded.id;
-      console.log("id",id)
-      // if(!id){
-      //   try{
-      //      id=req.params.id;
-      //     if(!id){
-      //       return res.status(404).json({
-      //         status:0,
-      //         message:"Id Not Found"
-      //       })
-      //     }
-      //   }
-      //   catch(err){
-      //     return(err.message)
-      //   }
-      // }
+     
     getUserByUserId(id, (err, results) => {
       if (err) {
         console.log(err);
@@ -176,7 +159,6 @@ module.exports = {
     let id = decoded.id;
     const body = req.body;
     body.id = id;
-    // console.log(body,"?????????????")
     const salt = genSaltSync(10);
     body.password = hashSync(body.password, salt);
     updateUser(body, (err, results) => {

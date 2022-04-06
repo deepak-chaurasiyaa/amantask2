@@ -9,6 +9,7 @@ const productRouter = require('./routes/product.router');
 const userRouter = require('./routes/user.router');
 const passwordRouter = require('./routes/password.router')
 const cartRouter = require("./routes/cart.router")
+const placeOrderRouter = require("./routes/placeOrder.router")
 
 app.use(express.json())
 app.use("/admin",adminRouter);
@@ -17,6 +18,7 @@ app.use("/product",productRouter);
 app.use("/user",userRouter); 
 app.use("/password",passwordRouter);
 app.use("/cart",cartRouter)
+app.use("/place-order",placeOrderRouter)
 
 
 app.listen(PORT, (req, res) => {
