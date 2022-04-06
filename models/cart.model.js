@@ -63,7 +63,7 @@ module.exports = {
   },
 
   getCartItemByUserIdProduct:({id,productId},callBack) =>{
-    console.log(id,productId,"line66")
+    // console.log(id,productId,"line66")
     pool.query(
         `select * from cart
         left join product
@@ -79,10 +79,38 @@ module.exports = {
         }
     )
   },
-  updateCart:({req,productId},cb)=>{
+  updateCart:({id,quantity,totalPrice,productId},callBack)=>{
+    // console.log(id,quantity,totalPrice, "line 83")
     pool.query(
-      `select quantity from cart where cart.userId=? and cart.productId=?`,
-      
+      `update cart set quantity=?, totalPrice=? where userId = ? and productId=?`,
+      [
+        quantity,
+        totalPrice,
+        id,
+        productId
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  }
+  ,
+  dedeleteCartColumn:({id,productId},callBack)=>{
+    pool.query(
+      `delete from cart where UserId=? and productId=?`,
+      [
+        id,
+        productId
+      ],
+      (error, results, fields) => {
+        if (error) {
+          callBack(error);
+        }
+        return callBack(null, results);
+      }
     )
   }
 }

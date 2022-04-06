@@ -1,4 +1,4 @@
-const {create,getCartItemByUserId,getCartItemByUserIdProduct,updateCart} = require("../models/cart.model")
+const {create,getCartItemByUserId,getCartItemByUserIdProduct,updateCart,dedeleteCartColumn} = require("../models/cart.model")
 const jwt = require("jsonwebtoken");
 const config = process.env
 var getIdByToken = (req) =>{
@@ -13,7 +13,6 @@ var getIdByToken = (req) =>{
     } 
         let headerToken = getToken(req)
         const token = req.body.token || req.query.token || req.headers["x-access-token"] || headerToken;
-    
         const decoded = jwt.verify(token, config.secret_key);
         req.user = decoded;
         let id = decoded.id;
@@ -34,9 +33,40 @@ module.exports = {
               success: 0,
               message:err
             });
-          }else if(results.length > 0){
-            console.log("qantity,",results.qantity)
-            updateCart({req,productId},(err,results) =>{
+          }
+          // console.log(results.length,"l38")
+          else if(results.length > 0){
+            console.log("qantity,",results[0],req.body)
+            // let id = results[0].id;
+            let quantity = results[0].quantity + req.body.quantity;
+            let totalPrice = quantity * results[0].price;
+            let xyz = {
+              id,
+              quantity,
+              totalPrice,
+              productId
+            }
+            console.log("xyz",xyz)
+            if(quantity <= 0){
+              dedeleteCartColumn(xyz,(err,results)=>{
+                if (err) {
+                  console.log(err);
+                  return res.status(400).json({
+                    success: 0,
+                    message:err
+                  });
+                }
+                else{
+                  return res.status(200).json({
+                    success:1,
+                    message:"Item removed successfully!"
+                  })
+                }
+              })
+            }
+            else{
+              // console.log(results[0]);
+            updateCart(xyz,(err,results) =>{
               if (err) {
                 console.log(err);
                 return res.status(400).json({
@@ -44,26 +74,57 @@ module.exports = {
                   message:err
                 });
               }
-              console.log("udate",results) 
+              res.status(200).send(results) 
             })
+            }
+            
           }
+          else if(results.length <= 0){
+            create(body, (err, results) => {
+              if (err) {
+                console.log(err);
+                return res.status(400).json({
+                  success: 0,
+                  message:err
+                });
+              }else{
+                return res.status(200).json({
+                  success: 1,
+                  data: results 
+                });
+              }
+             
+            });
+          }
+          
     })
-      create(body, (err, results) => {
-        if (err) {
-          console.log(err);
-          return res.status(400).json({
-            success: 0,
-            message:err
-          });
-        }else{
-          return res.status(200).json({
-            success: 1,
-            data: results 
-          });
-        }
-       
-      });
     }, 
+    deleteCartItem:(req,res) =>{
+      
+      const id = getIdByToken(req);
+     const productId = req.body.productId;
+     const xyz = {
+       id,
+       productId
+     }
+     dedeleteCartColumn(xyz,(err,results)=>{ 
+      if (err) {
+        console.log(err);
+        return res.status(400).json({
+          success: 0,
+          message:err
+        });
+      }
+      else{
+        return res.status(200).json({
+          success:1,
+          message:"Item removed successfully!"
+        })
+      }
+    })
+
+
+    },
     getCartItemByUserId:(req,res)=>{
         const id = getIdByToken(req)
         // const id = req.params.id;
