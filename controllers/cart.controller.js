@@ -25,7 +25,7 @@ module.exports = {
       const id = getIdByToken(req)
       body.userId = id;
       const productId = body.productId;
-      // console.log(body.userId,"line26")
+      console.log(body.userId,"line26")
       getCartItemByUserIdProduct({id:id,productId:productId},(err,results)=>{
         if (err) {
             console.log(err);

@@ -5,29 +5,6 @@ const { hashSync, genSaltSync, compareSync } = require("bcrypt");
 
 const jwt = require("jsonwebtoken");
 const config = process.env
-// var getIdByToken = (req) =>{
-//     try{
-//         let getToken = (req) =>{
-//         if (
-//             req.headers.authorization &&
-//             req.headers.authorization.split(" ")[0] === "Bearer"
-//             ) {
-//                 return req.headers.authorization.split(" ")[1];
-//             } 
-//             return null;
-//         } 
-//         let headerToken = getToken(req)
-//         const token = req.body.token || req.query.token || req.headers["x-access-token"] || headerToken;
-
-//         const decoded = jwt.verify(token, config.secret_key);
-//         req.user = decoded;
-//         let id = decoded.id;
-//         return id;
-//     }
-//     catch(err){
-//         return false
-//     }
-// }
 const validateUserEmail = (req, res, next) => {
 const email = req.body.email;
     try {
@@ -38,21 +15,20 @@ const email = req.body.email;
                 data: "No User Found Please do Sign Up"
             });
             }
-            // console.log('email',results.length)
-            // if(results.length < 1){
-            // return res.json({
-            //     success: 1,
-            //     message: "Reset Password Link has been sent successfully to your email"
-            //     });
-            // }
             if(results){
+                if(results.length === 0){
+                    return res.status(404).json({
+                        message: "Reset-Password Mail has been sent successfully."
+                    })
+                }
+               
             const jsontoken = sign({ FullName: results[0].firstName + " " + results[0].lastName,
             id:results[0].id,
             },process.env.secret_key, {
                 expiresIn: "1h"
             });
             results[0].token = jsontoken;
-            console.log("res[0]",results[0])
+            // console.log("res[0]",results[0])
             updateUser(results[0], (err, results) => {
                 if (err) {
                     console.log(err);
@@ -113,7 +89,6 @@ let sendMail = function(email,token){
 const resetpassword = (req,res, next)=>{
     const password = req.body.password;
     const confirmPassword = req.body.confirmPassword;
-    // console.log(password,confirmPassword);
     if(! (password === confirmPassword)){
         return res.status(404).json({message:"password and confirm password do not match."})
     }
@@ -121,8 +96,7 @@ const resetpassword = (req,res, next)=>{
     const decoded = jwt.verify(token, config.secret_key);
         req.user = decoded;
         let id = decoded.id;
-        console.log("id",id)
-    // let id = getIdByToken(req)
+        // console.log("id",id)
     if(!id){
       return  res.status(403).json({message: 'Please Provide a valid token!'})
     }

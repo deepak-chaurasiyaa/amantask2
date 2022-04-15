@@ -6,7 +6,7 @@ module.exports = {
       [email],
       (error, results, fields) => {
         if (error) {
-          callBack(error);
+          return callBack(error);
         }
         return callBack(null, results);
       }

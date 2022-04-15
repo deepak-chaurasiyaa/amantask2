@@ -1,6 +1,8 @@
 const express = require('express');
+var cors = require('cors');
 require('dotenv').config();
 const app = express();
+app.use(cors())
 const PORT = process.env.APP_PORT
 console.log("port", PORT)
 const adminRouter = require('./routes/admin.router');

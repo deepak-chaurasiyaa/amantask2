@@ -1,9 +1,8 @@
 const express =require('express')
 const router = express.Router();
-
 const {login} = require("../controllers/superadmin.controller")
 
-router.post("/login", login);
+router.post("/login",login);
 module.exports = router;
 
 // const {createSuperAdmin} = require("../controllers/superadmin.controller");

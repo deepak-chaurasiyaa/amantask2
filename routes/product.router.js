@@ -13,7 +13,7 @@ const {update} = require("../utils/uploadImage")
 router.post("/",admOrSuperAdmAuth,imageUpload.single('image'),upload);
 router.get("/:id",admOrSuperAdmAuth, getProductById);
 router.get("/",admOrSuperAdmAuth, getProduct);
-router.put("/update",admOrSuperAdmAuth, imageUpload.single('image'),update);
+router.put("/update/:id",admOrSuperAdmAuth, imageUpload.single('image'),update);
 router.delete("/",admOrSuperAdmAuth, deleteProduct);
 
 module.exports = router;
