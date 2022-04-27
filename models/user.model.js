@@ -12,7 +12,7 @@ module.exports = {
             flag = false
           }
           if(results.length > 0){
-              return callBack(null,{ message:{data:"User Already Exists. Please Use another Email.",err:true}})
+              return callBack(null,"User Already Exists. Please Use another Email.")
           }
           else{
             if(!(data.token)){
@@ -32,9 +32,14 @@ module.exports = {
                 ],
                 (error, results, fields) => {
                   if (error) {
+                    // console.log("pppppppppppp1",results)
                     callBack(error);
                   }
-                  return callBack(null, results);
+                  return callBack(null, { 
+                    firstName:data.firstName,
+                    lastName:data.lastName,
+                    id:results.insertId
+                  });
                 }
               );
           }
@@ -82,17 +87,16 @@ module.exports = {
   },
   updateUser: (data, callBack) => {
     if(!data.token){
-      data.token ="";
+      data.token ="xyz";
     }
     
     pool.query(
-      `update user set firstName=?, lastName=?, gender=?, email=?, password=?, number=?, token=? where id = ?`,
+      `update user set firstName=?, lastName=?, gender=?, email=?, number=?, token=? where id = ?`,
       [
         data.firstName,
         data.lastName,
         data.gender,
         data.email,
-        data.password,
         data.number,
         data.token,
         data.id,

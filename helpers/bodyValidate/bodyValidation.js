@@ -57,7 +57,7 @@ module.exports = {
                 firstName: Joi.string().required().min(1).regex(/^[A-Za-z]*$/, 'alphanumeric and space').max(30),
                 lastName: Joi.string().required().min(1).regex(/^[A-Za-z]*$/, 'alphanumeric and space').max(30),
                 email: Joi.string().required().email().max(80),
-                password: Joi.string().min(4).alphanum().required(),
+                id: Joi.number(),
                 gender: Joi.string().required().valid("male").valid("female"),
                 number:Joi.string().required().min(10).regex(/^[0-9]*$/, 'alphanumeric and space').max(10),
                 token:Joi.string()

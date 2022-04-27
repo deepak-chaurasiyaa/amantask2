@@ -36,13 +36,7 @@ const {
       const salt = genSaltSync(10);
       body.password = hashSync(body.password, salt);
       create(body, (err, results) => {
-        if(results){
-          return res.status(500).json({
-            success: 0,
-            message:results
-          });
-        }
-
+        console.log("resxxxxxxxxxxxxx",results)
         if (err) {
           console.log(err);
           return res.status(400).json({
@@ -50,10 +44,29 @@ const {
             message:err
           });
         }else{
-          return res.status(200).json({
-            success: 1,
-            data: results 
-          });
+          if(results === "User Already Exists. Please Use another Email."){
+            return res.status(200).json({results,
+            });
+          }
+          else{
+            const jsontoken = sign(
+              {
+                FullName: results.firstName + " " + results.lastName,
+                id: results.id,
+                isUser: true,
+              },
+              process.env.secret_key,
+              {
+                expiresIn: "1h",
+              }
+            );
+            return res.status(200).json({
+              success: 1,
+              data: results,
+              jsontoken,
+            });
+          }
+          
         }
        
       });
@@ -147,7 +160,8 @@ const {
       const body = req.body;
       const salt = genSaltSync(10);
       let id = getIdByToken(req)
-      body.password = hashSync(body.password, salt);
+      console.log("IDDDDDDDDDD",id)
+     
       body.id = id;
       updateUser(body, (err, results) => {
         if (err) {

@@ -12,7 +12,8 @@ const userRouter = require('./routes/user.router');
 const passwordRouter = require('./routes/password.router')
 const cartRouter = require("./routes/cart.router")
 const placeOrderRouter = require("./routes/placeOrder.router")
-
+app.use(express.static(__dirname));
+app.use(express.static("public"));
 app.use(express.json())
 app.use("/admin",adminRouter);
 app.use("/super-admin",superAdminRouter); 

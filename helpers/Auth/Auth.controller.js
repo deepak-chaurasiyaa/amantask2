@@ -110,8 +110,9 @@ try {
   const decoded = jwt.verify(token, config.secret_key);
   req.user = decoded;
   let id = decoded.id
+  console.log("decode",decoded.isUser);
   if(decoded.isUser){
-      return next();
+     return next();
   }
   else{
       return res.status(403).send("You are not allowed to perform this action.")

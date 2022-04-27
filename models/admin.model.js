@@ -67,13 +67,12 @@ module.exports = {
   },
   updateUser: (data, callBack) => {
     pool.query(
-      `update admin set firstName=?, lastName=?, gender=?, email=?, password=?, number=? where id = ?`,
+      `update admin set firstName=?, lastName=?, gender=?, email=?,number=? where id = ?`,
       [
         data.firstName,
         data.lastName,
         data.gender,
         data.email,
-        data.password,
         data.number,
         data.id
       ],

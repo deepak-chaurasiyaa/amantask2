@@ -159,8 +159,7 @@ module.exports = {
     let id = decoded.id;
     const body = req.body;
     body.id = id;
-    const salt = genSaltSync(10);
-    body.password = hashSync(body.password, salt);
+    
     updateUser(body, (err, results) => {
       if (err) {
         console.log(err);

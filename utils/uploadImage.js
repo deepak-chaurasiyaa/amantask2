@@ -2,13 +2,14 @@
 const {create,updateProduct} = require('../models/product.model')
   
       let upload = async(req, res) =>{
+      
         console.log("reaching here")
         const body = req.body;
         body.image = req.file.path;
          create(body, (err, results) => {
            if (err) {
              console.log(err);
-             return res.status(500).json({
+             return res.status(400).json({
                success: 0,
                message:err
              });

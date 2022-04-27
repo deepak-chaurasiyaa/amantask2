@@ -37,7 +37,8 @@ module.exports = {
       }
     );
   },
-  getCartItemByUserId: (usrId, callBack) => {
+  getCartItemByUserId: ({id:usrId}, callBack) => {
+    console.log(usrId,"usrId");
     pool.query(
       `select * from cart
         left join product
