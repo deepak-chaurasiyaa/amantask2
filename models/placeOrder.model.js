@@ -11,23 +11,20 @@ module.exports = {
             if (error) {
               callBack(error);
             }
-            console.log("pppppppppppp",results)
             if(results.length > 0){
+              const purchased_date = new Date();
                 // return callBack(null, results);
                 pool.query(
-                    `update cart set cart.status = 1 where UserId=?`,
-                    [
-                      id
-                    ],
-                    (error, results, fields) => {
-                      if (error) {
-                        callBack(error);
-                      }
-                      else{
-                        return callBack(null, "Order placed Successfully!")
-                      }
+                  `update cart set cart.status = 1, cart.purchased_date='${purchased_date}' where UserId=? and cart.status=0`,
+                  [id],
+                  (error, results, fields) => {
+                    if (error) {
+                      callBack(error);
+                    } else {
+                      return callBack(null, "Order placed Successfully!");
                     }
-                )
+                  }
+                );
             
             }
             else{

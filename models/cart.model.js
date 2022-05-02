@@ -65,7 +65,7 @@ module.exports = {
     pool.query(
       `select * from cart
         left join product
-        ON product.id = cart.productId where cart.userId=? and cart.productId=?`,
+        ON product.id = cart.productId where cart.userId=? and cart.productId=? and cart.status = 0`,
       [id, productId],
       (error, results, fields) => {
         if (error) {

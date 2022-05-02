@@ -61,19 +61,19 @@ const email = req.body.email;
 let sendMail = function(email,token){
     
     var mailTransporter = nodemailer.createTransport({
-        host: "smtp.mailtrap.io",
-        port: 2525,
-        auth: {
-          user: "f28b729a3997d3",
-          pass: "b832c91eddf1cb"
-        }
-      });
+      host: "smtp.mailtrap.io",
+      port: 2525,
+      auth: {
+        user: "25334cfd4977db",
+        pass: "f2fe1701fb87e2",
+      },
+    });
 
     let mailDetails = {
         from: 'dchaurasiya8589@gmail.com',
         to: email,
         subject: 'Reset Password', 
-        html: '<p>Click <a href="http://localhost:3000/' + token + '">here</a> to reset your password</p>',
+        html: '<p>Click <a href="http://localhost:3001/set-new-password?token=' + token + '">here</a> to reset your password</p>',
         text: token
     };
 
